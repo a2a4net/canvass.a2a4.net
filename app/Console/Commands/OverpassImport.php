@@ -18,7 +18,36 @@ class OverpassImport extends Command
     public function handle()
     {
         foreach ([
-                     'Вінниця',
+                    /*
+                    "Барський район",
+                    "Бершадський район",
+                    "Вінницький район",
+                    "Гайсинський район",
+                    "Жмеринський район",
+                    "Іллінецький район",
+                    "Калинівський район",
+                    "Козятинський район",
+                    "Крижопільський район",
+                    "Липовецький район",
+                    "Літинський район",
+                    "Могилів-Подільський район",
+                    "Мурованокуриловецький район",
+                    "Немирівський район",
+                    "Оратівський район",
+                    "Піщанський район",
+                    "Погребищенський район",
+                    "Теплицький район",
+                    "Томашпільський район",
+                    "Тростянецький район",
+                    "Тульчинський район",
+                    "Тиврівський район",
+                    "Хмільницький район",
+                    "Чернівецький район",
+                    "Чечельницький район",
+                    "Шаргородський район",
+                    "Ямпільський район",
+                    */
+                     "Вінниця",
                  ] as $areaName) {
             $locations = $this->getLocations($areaName);
 
@@ -29,12 +58,33 @@ class OverpassImport extends Command
                     continue;
                 }
 
-                Consumer::create([
-                    'street' => trim($location['tags']['addr:street']),
-                    'housenumber' => trim($location['tags']['addr:housenumber']),
+                if (!(($location['center']['lat'] >= 48.06 && $location['center']['lat'] <= 49.88) && ($location['center']['lon'] >= 27.31 && $location['center']['lon'] <= 30.05))) {
+                    continue;
+                }
+
+                $fields = [
+                    'street' => trim($location['tags']['addr:street'] ?? ''),
+                    'housenumber' => trim($location['tags']['addr:housenumber'] ?? ''),
                     'lat' => $location['center']['lat'],
                     'lon' => $location['center']['lon']
-                ]);
+                ];
+
+                if (empty($fields['street'])) {
+                    $fields['street'] = 'Вулиця fake ім. ' . fake()->streetName();
+                    $fields['housenumber'] = fake()->buildingNumber();
+                }
+
+                if (!empty($location['tags']['building']) && $location['tags']['building'] == 'apartments') {
+                    $apartments = rand(10, 100);
+
+                    for ($apartment = 1; $apartment <= $apartments; $apartment++) {
+                        $fields['apartment'] = $apartment;
+
+                        Consumer::create($fields);
+                    }
+                } else {
+                    Consumer::create($fields);
+                }
             }
         }
     }
@@ -42,11 +92,12 @@ class OverpassImport extends Command
     private function getLocations($areaName = ''): array
     {
         $query = <<<OVERPASS
-[out:json][timeout:120];
-area["name"="{$areaName}"]->.searchArea;
+[out:json][timeout:60];
+area(3600071241)->.vinnitsia;
+area["name"="{$areaName}"](area.vinnitsia)->.targetDistrict;
 (
-  way["building"]["addr:housenumber"]["addr:street"](area.searchArea);
-  relation["building"]["addr:housenumber"]["addr:street"](area.searchArea);
+  way["building"](area.targetDistrict);
+  relation["building"](area.targetDistrict);
 );
 out tags center;
 OVERPASS;

@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
 
             $table->string('street')->nullable();
-            $table->string('housenumber')->nullable();
+            $table->string('housenumber', 32)->nullable();
+            $table->string('apartment', 32)->nullable();
 
             $table->decimal('lat', 10, 7);
             $table->decimal('lon', 10, 7);
 
+            $table->index(['lat', 'lon']);
             #$table->timestamps();
         });
     }

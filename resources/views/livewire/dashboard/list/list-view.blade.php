@@ -4,7 +4,7 @@
             <table class="table table-sm table-hover">
                 <thead>
                 <tr>
-                    <th>{{ __('ID') }}</th>
+                    <th>{{ __('Code') }}</th>
                     <th>{{ __('Планова дата') }}</th>
                     <th>{{ __('Адреса') }}</th>
                     <th class="text-end">{{ __('Перевірено') }}</th>
@@ -13,7 +13,7 @@
                 <tbody>
                 @foreach($points as $point)
                     <tr>
-                        <td class="p-0">{{ $point->consumer->id }}</td>
+                        <td class="p-0">{{ $point->consumer->code }}</td>
                         <td class="p-0">{{ $point->day->toDateString() }}</td>
                         <td class="p-0">{{ $point->consumer->address }}</td>
                         <td class="p-0 text-end">

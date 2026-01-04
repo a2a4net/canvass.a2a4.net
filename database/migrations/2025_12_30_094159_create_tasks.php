@@ -23,6 +23,9 @@ return new class extends Migration
             $table->timestamp('checked_at')->nullable();
 
             $table->unique(['day', 'employee_id', 'consumer_id']);
+
+            $table->index(['employee_id', 'checked_at', 'consumer_id']);
+            $table->index(['employee_id', 'day', 'is_checked']);
         });
     }
 

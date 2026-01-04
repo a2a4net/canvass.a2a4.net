@@ -14,10 +14,8 @@ return new class extends Migration {
             $table->id();
 
             $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
 
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(true)->index();
 
             $table->timestamps();
         });

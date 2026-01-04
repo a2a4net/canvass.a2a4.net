@@ -63,7 +63,7 @@ class DataService
                         'coordinates' => [(float)$p->consumer->lon, (float)$p->consumer->lat],
                     ],
                     'properties' => [
-                        'id' => $p->consumer->id,
+                        'id' => $p->consumer->code,
                         'address' => $p->consumer->address,
                         'checked_at' => $p->checked_at ? $p->checked_at->toDateTimeString() : null,
                         'planned' => ($p->checked_at && $p->checked_at->toDateString() == $p->day->toDateString())

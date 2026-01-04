@@ -25,8 +25,6 @@ class EmployeeFactory extends Factory
 
         return [
             'name' => $firstName . ' ' . $lastName,
-            'phone' => fake()->unique()->numerify('+380#########'),
-            'email' => strtolower($firstName . $lastName . fake()->word()) . '@' . fake()->safeEmailDomain(),
             'is_active' => true
         ];
     }

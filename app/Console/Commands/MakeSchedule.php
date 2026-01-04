@@ -10,6 +10,12 @@ use Carbon\CarbonPeriod;
 use App\Models\Employee;
 use App\Models\Consumer;
 
+
+/*
+
+*/
+
+
 class MakeSchedule extends Command
 {
     protected $signature = 'app:MakeSchedule {year} {month} {run?}';
@@ -102,7 +108,7 @@ class MakeSchedule extends Command
                     continue;
                 }
 
-                if (!$this->addTasks($employee, $date, rand(10, 50))) {
+                if (!$this->addTasks($employee, $date, rand(25, 150))) {
                     break;
                 }
             }
@@ -119,8 +125,8 @@ class MakeSchedule extends Command
                 ->whereYear('day', $date->year);
         })
             ->orderByRaw('FLOOR(lat * 1000), FLOOR(lon * 1000), lat, lon')
-            #->orderBy('street')
-            #->orderBy('housenumber')
+            ->orderBy('street')
+            ->orderBy('housenumber')
             ->limit($total)
             ->cursor();
 

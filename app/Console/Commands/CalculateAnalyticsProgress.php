@@ -31,6 +31,7 @@ class CalculateAnalyticsProgress extends Command
     {
         $employees = Employee::isActive()
             ->orderBy('id')
+            #->whereId(1)
             ->get();
 
         foreach ($employees as $employee) {
@@ -71,13 +72,13 @@ class CalculateAnalyticsProgress extends Command
             $fields['checked_planned'] = $employee->tasks()
                 ->isChecked()
                 ->whereDate('day', $date->toDateString())
-                ->whereDate('checked_at', $date->toDateString())
+                ->whereBetween('checked_at', [$date->startOfDay()->toDateTimeString(), $date->endOfDay()->toDateTimeString()])
                 ->count();
 
             $fields['checked_unplanned'] = $employee->tasks()
                 ->isChecked()
                 ->whereDate('day', '<>', $date->toDateString())
-                ->whereDate('checked_at', $date->toDateString())
+                ->whereBetween('checked_at', [$date->startOfDay()->toDateTimeString(), $date->endOfDay()->toDateTimeString()])
                 ->count();
 
             if ($fields['checked_planned'] > 0) {
@@ -86,7 +87,7 @@ class CalculateAnalyticsProgress extends Command
 
             $tasks = $employee->tasks()
                 ->isChecked()
-                ->whereDate('checked_at', $date->toDateString())
+                ->whereBetween('checked_at', [$date->startOfDay()->toDateTimeString(), $date->endOfDay()->toDateTimeString()])
                 ->orderBy('checked_at')
                 ->get();
 

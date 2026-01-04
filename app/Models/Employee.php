@@ -11,7 +11,7 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'phone', 'email', 'is_active'];
+    protected $fillable = ['name', 'is_active'];
 
     protected $casts = [
         'is_active' => 'bool',
