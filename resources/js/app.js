@@ -20,17 +20,17 @@ document.addEventListener('livewire:navigated', () => {
 window.setupDashboardMap = (el, geoJson) => ({
     initialized: false,
 
-    init() {
-        if (this.initialized) return;
+    initMap() {
+        if (!this.initialized) {
+            window.LeafletMap.init(el, {
+                center: [49.2320995, 28.4684847],
+                zoom: 16
+            });
 
-        window.LeafletMap.init(el, {
-            center: [49.2320995, 28.4684847],
-            zoom: 16
-        });
+            window.LeafletMap.render(geoJson);
 
-        window.LeafletMap.render(geoJson);
-
-        this.initialized = true;
+            this.initialized = true;
+        }
 
         this.resize();
     },
