@@ -38,8 +38,8 @@ class Dashboard extends Component
             'filters.view' => 'nullable|string|in:map,list',
             'filters.type' => 'required|string|in:progress,time,density,deviation',
             'filters.search' => 'nullable|string|max:100',
-            'filters.date.from' => 'required|date',
-            'filters.date.to' => 'required|date|after_or_equal:filters.date.from',
+            'filters.date.from' => 'required|date|before_or_equal:today',
+            'filters.date.to' => 'required|date|after_or_equal:filters.date.from|before_or_equal:today',
         ];
     }
 

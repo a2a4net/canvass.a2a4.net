@@ -19,7 +19,7 @@
     </div>
 
     <div class="ms-auto">
-        <div class="btn-group btn-group-sm mt-1" role="group">
+        <div class="btn-group" role="group">
             @foreach([
                 'map' => ['icon' => 'bi-map', 'tooltip' => 'Мапа'],
                 'list' => ['icon' => 'bi-list-ul', 'tooltip' => 'Список'],

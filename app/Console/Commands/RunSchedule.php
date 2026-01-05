@@ -37,14 +37,14 @@ class RunSchedule extends Command
             $stats = DB::table('tasks')
                 ->where('employee_id', $employee->id)
                 ->where('day', $dayStr)
-                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN is_checked = 1 THEN 1 ELSE 0 END) as checked')
+                ->selectRaw('COUNT(*) AS `total`, SUM(CASE WHEN `is_checked` = 1 THEN 1 ELSE 0 END) AS `checked`')
                 ->first();
 
             if (!$stats || $stats->total == 0) continue;
 
             $targetCount = ceil($stats->total * $progress);
 
-            if ($stats->checked < $targetCount && rand(1, 100) <= 60) {
+            if ($stats->checked < $targetCount && rand(1, 100) <= 75) {
                 $task = DB::table('tasks')
                     ->where('employee_id', $employee->id)
                     ->where('day', $dayStr)

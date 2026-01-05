@@ -50,6 +50,8 @@ window.initDateRangePicker = (el) => {
     flatpickr(el, {
         mode: 'range',
         dateFormat: 'Y-m-d',
+        minDate: '2025-01-01',
+        maxDate: 'today',
         defaultDate: (from && to) ? [from, to] : null,
         locale: {...Ukrainian, rangeSeparator: ' — '},
         onChange: (dates) => {
