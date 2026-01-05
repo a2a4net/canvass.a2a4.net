@@ -33,6 +33,7 @@ class EfficiencyService
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
             ->orderByRaw('efficiency_index = 0, efficiency_index DESC')
+            ->orderByDesc('total_planned')
             ->paginate(20);
     }
 

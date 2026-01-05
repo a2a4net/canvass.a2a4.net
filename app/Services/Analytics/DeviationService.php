@@ -33,6 +33,7 @@ class DeviationService
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
             ->orderByRaw('`deviation` = 0, `deviation` ASC')
+            ->orderByDesc('total_planned')
             ->paginate(20)
             ->through(function ($employee) {
                 $employee->deviation_human = number_format($employee->deviation, 2) . '%';

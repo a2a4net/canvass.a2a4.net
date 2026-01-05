@@ -33,6 +33,7 @@ class DensityService
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
             ->orderByRaw('`dispersion` = 0, `dispersion` ASC')
+            ->orderByDesc('total_planned')
             ->paginate(20);
     }
 

@@ -32,6 +32,7 @@ class ProgressService
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
             ->orderByDesc('total_progress')
+            ->orderByDesc('total_planned')
             ->paginate(20);
     }
 

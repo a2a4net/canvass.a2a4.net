@@ -36,6 +36,7 @@ class DataService
         }
 
         $filteredData = $this->queryBuilder()
+            ->isChecked()
             ->orderBy('checked_at')
             ->get();
 
@@ -84,7 +85,7 @@ class DataService
                             Carbon::parse($this->filters['date']['to'])->endOfDay()
                         ]);
                 })
-                    ->orWhereBetween('day', [$this->filters['date']['from'], $this->filters['date']['to']]);
+                    /*->orWhereBetween('day', [$this->filters['date']['from'], $this->filters['date']['to']])*/;
             })
             ->with('consumer');
     }

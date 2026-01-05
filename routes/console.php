@@ -7,7 +7,7 @@ use App\Console\Commands\CalculateAnalyticsProgress;
 
 Schedule::command(RunSchedule::class)
     ->weekdays()
-    ->between('09:00', '18:00')
+    ->between('09:05', '18:00')
     ->everyFiveMinutes();
 
 Schedule::command(CalculateAnalyticsProgress::class, [now()->subDay()->toDateString()])
@@ -15,5 +15,5 @@ Schedule::command(CalculateAnalyticsProgress::class, [now()->subDay()->toDateStr
 
 Schedule::command(CalculateAnalyticsProgress::class, [now()->toDateString()])
     ->weekdays()
-    ->between('09:00', '18:30')
+    ->between('09:10', '18:05')
     ->everyFiveMinutes();

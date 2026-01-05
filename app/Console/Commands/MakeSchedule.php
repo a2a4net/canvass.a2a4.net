@@ -10,12 +10,6 @@ use Carbon\CarbonPeriod;
 use App\Models\Employee;
 use App\Models\Consumer;
 
-
-/*
-
-*/
-
-
 class MakeSchedule extends Command
 {
     protected $signature = 'app:MakeSchedule {year} {month} {run?}';
@@ -36,32 +30,6 @@ class MakeSchedule extends Command
 
         if ($this->argument('run')) {
             $this->runTasks($employees, $period);
-        }
-    }
-
-    public function handleTasks(?Carbon $timestamp = null): void
-    {
-        $timestamp ??= Carbon::now();
-
-        $employees = Employee::isActive()
-            ->orderBy('id')
-            ->get();
-
-        foreach ($employees as $employee) {
-            $tasks = $employee->tasks()
-                ->with('employee')
-                ->with('consumer')
-                ->isNotChecked()
-                ->whereDate('day', $timestamp->toDateString())
-                ->orderBy('id')
-                ->limit(rand(0, 3))
-                ->get();
-
-            foreach ($tasks as $task) {
-                $task->checkIn($timestamp);
-
-                $this->info($task->employee->id . ' | ' . $task->employee->name . ' ' . $task->consumer->address . ' ' . $timestamp->toDateTimeString());
-            }
         }
     }
 
