@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-lg-4 col-xl-5 col-xxl-6">
-        <div x-show="$wire.filters.view == 'map'" x-cloak>
+        <div x-show="$wire.filters.view == 'map'">
             <livewire:dashboard.map.map-view :filters="$filters" />
         </div>
 

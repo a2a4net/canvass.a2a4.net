@@ -57,7 +57,7 @@ class RunSchedule extends Command
                 }
             }
 
-            if (rand(1, 100) <= 15) {
+            if (rand(1, 100) <= 5) {
                 $futureTask = DB::table('tasks')
                     ->where('employee_id', $employee->id)
                     ->where('day', '>', $dayStr)

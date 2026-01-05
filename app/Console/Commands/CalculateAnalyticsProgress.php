@@ -56,12 +56,11 @@ class CalculateAnalyticsProgress extends Command
                 $avgLat = $density->avg('lat_grid');
                 $avgLon = $density->avg('lon_grid');
 
-                $dispersion = $density->map(function ($item) use ($avgLat, $avgLon) {
-                    return sqrt(pow($item->lat_grid - $avgLat, 2) + pow($item->lon_grid - $avgLon, 2));
-                })->avg();
+                $fields['dispersion'] = (int)round($density->map(function ($item) use ($avgLat, $avgLon) {
+                    return sqrt(pow(($item->lat_grid - $avgLat) * 111000, 2) + pow(($item->lon_grid - $avgLon) * 74000, 2));
+                })->avg());
 
-                $fields['dispersion'] = (int)round($dispersion * 111000);
-                $fields['concentration'] = (int)round($density->sum('weight') / $density->count());
+                $fields['concentration'] = (int)round(($density->where('weight', '>', 1)->sum('weight') / $density->sum('weight')) * 100);
             }
 
             $fields['planned'] = $employee->tasks()

@@ -21,7 +21,7 @@ class DensityService
             ->selectRaw('SUM(`planned`) AS `total_p`')
             ->selectRaw('SUM(`checked_planned` + `checked_unplanned`) AS `total_c`')
             ->selectRaw('FLOOR(AVG(`dispersion`)) AS `avg_dispersion`')
-            ->selectRaw('ROUND(AVG(`concentration`), 1) AS `avg_concentration`')
+            ->selectRaw('ROUND(AVG(`concentration`)) AS `avg_concentration`')
             ->whereBetween('day', [$from, $to])
             ->groupBy('employee_id');
 

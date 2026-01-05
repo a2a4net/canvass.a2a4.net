@@ -84,7 +84,7 @@ class Dashboard extends Component
     }
 
     #[On('showPoints')]
-    public function showPoints(int $eid): void
+    public function showPoints(int $eid = null): void
     {
         $this->filters['eid'] = $eid;
 

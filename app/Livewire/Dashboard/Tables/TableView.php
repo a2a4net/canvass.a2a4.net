@@ -24,7 +24,7 @@ class TableView extends Component
         $this->resetPage();
     }
 
-    public function selectEmployee(int $eid): void
+    public function selectEmployee(int $eid = null): void
     {
         $this->dispatch('showPoints', $eid);
     }

@@ -6,7 +6,7 @@
             <th style="width: 85px;" class="text-end">{{ __('Виконано') }}</th>
             <th style="width: 85px;" class="text-end">{{ __('План') }}</th>
             <th style="width: 135px;" class="text-end">{{ __('Відхилення') }} <i class="bi bi-info-circle" x-init="new bootstrap.Tooltip($el)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ __('Точок поза плановим маршрутом') }}"></i></th>
-            <th class="text-center">{{ __('Виконання') }}</th>
+            <th class="text-center">{{ __('Виконання плану') }}</th>
             <th class="text-end" style="width: 50px;">{{ __('%') }}</th>
         </tr>
     </thead>
