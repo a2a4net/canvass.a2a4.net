@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Carbon\Carbon;
-use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
 
 class RunSchedule extends Command
 {
@@ -13,15 +13,20 @@ class RunSchedule extends Command
 
     public function handle()
     {
-        $this->handleTasks(Carbon::create(2026, 1, 5, 9, 5));
+        DB::connection()->disableQueryLog();
+
+        $this->handleTasks();
     }
 
     public function handleTasks(?Carbon $timestamp = null): void
     {
         $timestamp ??= Carbon::now();
 
-        $employees = Employee::isActive()
-            ->orderBy('id')
+        $dayStr = $timestamp->toDateString();
+
+        $employees = DB::table('employees')
+            ->where('is_active', true)
+            ->select('id', 'name')
             ->get();
 
         foreach ($employees as $employee) {
@@ -29,45 +34,56 @@ class RunSchedule extends Command
             $userDeviation = rand(-20, 20) / 100;
             $progress = max(0, min(1, $baseProgress + $userDeviation));
 
-            $tasks = $employee->tasks()
-                ->with(['employee', 'consumer'])
-                ->whereDate('day', $timestamp->toDateString())
-                ->orderBy('id')
-                ->get();
+            $stats = DB::table('tasks')
+                ->where('employee_id', $employee->id)
+                ->where('day', $dayStr)
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN is_checked = 1 THEN 1 ELSE 0 END) as checked')
+                ->first();
 
-            if ($tasks->isEmpty()) continue;
+            if (!$stats || $stats->total == 0) continue;
 
-            $targetCount = ceil($tasks->count() * $progress);
-            $currentChecked = $tasks->whereNotNull('checked_at')->count();
+            $targetCount = ceil($stats->total * $progress);
 
-            if ($currentChecked < $targetCount && rand(1, 100) <= 60) {
-                $task = $tasks->whereNull('checked_at')->first();
+            if ($stats->checked < $targetCount && rand(1, 100) <= 60) {
+                $task = DB::table('tasks')
+                    ->where('employee_id', $employee->id)
+                    ->where('day', $dayStr)
+                    ->where('is_checked', false)
+                    ->orderBy('id')
+                    ->first();
 
                 if ($task) {
-                    $randomTime = $timestamp->copy()->subSeconds(rand(0, 300));
-
-                    $task->checkIn($randomTime);
-
-                    $this->info($task->employee->id . ' | ' . $task->employee->name . ' ' . $task->consumer->address . ' ' . $randomTime->toDateTimeString());
+                    $this->markTask($task->id, $timestamp, $employee, 'План');
                 }
             }
 
             if (rand(1, 100) <= 15) {
-                $futureTask = $employee->tasks()
-                    ->isNotChecked()
-                    ->whereDate('day', '>', $timestamp->toDateString())
+                $futureTask = DB::table('tasks')
+                    ->where('employee_id', $employee->id)
+                    ->where('day', '>', $dayStr)
+                    ->where('day', '<=', $timestamp->copy()->endOfMonth()->toDateString())
+                    ->where('is_checked', false)
+                    ->orderBy('day')
                     ->orderBy('id')
                     ->first();
 
                 if ($futureTask) {
-                    $randomTime = $timestamp->copy()->subSeconds(rand(0, 300));
-
-                    $futureTask->checkIn($randomTime);
-
-                    $this->info($futureTask->employee->id . ' | ' . $futureTask->employee->name . ' ' . $futureTask->consumer->address . ' ' . $randomTime->toDateTimeString());
+                    $this->markTask($futureTask->id, $timestamp, $employee, 'Позаплан');
                 }
             }
         }
+    }
+
+    private function markTask($taskId, $timestamp, $employee, $type): void
+    {
+        $checkedAt = $timestamp->copy()->subSeconds(rand(0, 300));
+
+        DB::table('tasks')->where('id', $taskId)->update([
+            'is_checked' => true,
+            'checked_at' => $checkedAt->toDateTimeString(),
+        ]);
+
+        $this->info($type . ' | ' . $employee->id . ' | ' . $employee->name . ' ' . $checkedAt->toDateTimeString());
     }
 
     private function getDayProgress(Carbon $now): float
@@ -78,8 +94,6 @@ class RunSchedule extends Command
         if ($now <= $start) return 0;
         if ($now >= $end) return 1;
 
-        $linear = $start->diffInMinutes($now) / $start->diffInMinutes($end);
-
-        return sqrt($linear);
+        return $start->diffInMinutes($now) / $start->diffInMinutes($end);
     }
 }

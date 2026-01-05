@@ -18,15 +18,22 @@ class DataService
         return $this;
     }
 
+    public function getEmployee(): ?Employee
+    {
+        return once(function () {
+            return Employee::find($this->filters['eid'] ?? null);
+        });
+    }
+
     public function getPoints(): LengthAwarePaginator|null
     {
-        if (empty($this->filters['eid'])) {
+        if (empty($this->filters['eid']) || !$this->getEmployee()) {
             return null;
         }
 
         return $this->queryBuilder()
-            ->orderByRaw('`day`, `is_checked` = 1, `checked_at`')
-            ->paginate(32, pageName: 'page-p');
+            ->orderByRaw('`is_checked` = 1, `checked_at` DESC')
+            ->paginate(30, pageName: 'page-p');
     }
 
     public function getGeoJson(): array
@@ -76,7 +83,7 @@ class DataService
 
     private function queryBuilder()
     {
-        return Employee::find($this->filters['eid'])->tasks()
+        return $this->getEmployee()->tasks()
             ->where(function ($q) {
                 $q->where(function ($sub) {
                     $sub->whereNotNull('checked_at')

@@ -34,6 +34,7 @@ class EfficiencyService
             })
             ->orderByRaw('efficiency_index = 0, efficiency_index DESC')
             ->orderByDesc('total_planned')
+            ->orderByDesc('id')
             ->paginate(20);
     }
 

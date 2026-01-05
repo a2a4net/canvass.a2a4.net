@@ -1,13 +1,18 @@
 <div class="card">
-    <div class="card-body pt-1 pb-0" style="max-height: 850px;">
+    @if (!empty($employee->id))
+        <div class="card-header">
+            <span class="fw-bold">{{ $employee->name }}</span> <span class="float-end">{{ $filterDate }}</span>
+        </div>
+    @endif
+    <div class="card-body pt-2 pb-0">
         @if ($points && $points->isNotEmpty())
             <table class="table table-sm table-hover">
                 <thead>
                 <tr>
-                    <th>{{ __('Code') }}</th>
-                    <th>{{ __('Планова дата') }}</th>
+                    <th style="width: 100px;">{{ __('Code') }}</th>
+                    <th style="width: 100px;">{{ __('План') }}</th>
                     <th>{{ __('Адреса') }}</th>
-                    <th class="text-end">{{ __('Перевірено') }}</th>
+                    <th style="width: 132px;">{{ __('Перевірено') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,9 +33,9 @@
                 </tbody>
             </table>
         @elseif ($points)
-            <div class="text-center">{{ __('Нічого не знайдено') }}</div>
+            <div class="text-center p-4">{{ __('Нічого не знайдено') }}</div>
         @else
-            <div class="text-center">{{ __('Спочатку оберіть працівника') }}</div>
+            <div class="text-center p-4">{{ __('Спочатку оберіть працівника') }}</div>
         @endif
     </div>
 

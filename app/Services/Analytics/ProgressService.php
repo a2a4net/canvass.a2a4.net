@@ -33,6 +33,7 @@ class ProgressService
             })
             ->orderByDesc('total_progress')
             ->orderByDesc('total_planned')
+            ->orderByDesc('id')
             ->paginate(20);
     }
 

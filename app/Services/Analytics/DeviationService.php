@@ -32,8 +32,9 @@ class DeviationService
             ->leftJoinSub($analyticsQuery, 'stats', function ($join) {
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
-            ->orderByRaw('`deviation` = 0, `deviation` ASC')
+            ->orderByDesc('deviation')
             ->orderByDesc('total_planned')
+            ->orderByDesc('id')
             ->paginate(20)
             ->through(function ($employee) {
                 $employee->deviation_human = number_format($employee->deviation, 2) . '%';

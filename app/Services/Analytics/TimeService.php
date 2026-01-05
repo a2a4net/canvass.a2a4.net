@@ -35,6 +35,7 @@ class TimeService
             })
             ->orderByRaw('`median_time` = 0, `median_time` ASC')
             ->orderByDesc('total_planned')
+            ->orderByDesc('id')
             ->paginate(20)
             ->through(function ($employee) {
                 $employee->median_time_human = CarbonInterval::seconds($employee->median_time)->cascade()->forHumans(['short' => true]);

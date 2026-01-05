@@ -34,7 +34,13 @@ class DensityService
             })
             ->orderByRaw('`dispersion` = 0, `dispersion` ASC')
             ->orderByDesc('total_planned')
-            ->paginate(20);
+            ->orderByDesc('id')
+            ->paginate(20)
+            ->through(function ($employee) {
+                $employee->dispersion_human = $employee->dispersion >= 1000 ? (number_format(round($employee->dispersion / 1000), 0, '.', ' ') . ' км') : ($employee->dispersion . ' м');
+
+                return $employee;
+            });
     }
 
     public function getTableView(): string

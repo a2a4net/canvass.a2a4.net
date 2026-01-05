@@ -69,6 +69,8 @@ class Dashboard extends Component
         $this->validate();
 
         $this->dispatch('tableUpdate', $this->filters);
+
+        $this->dispatchView();
     }
 
     #[On('viewUpdate')]
@@ -78,7 +80,7 @@ class Dashboard extends Component
 
         $this->validate();
 
-        $this->dispatch($this->filters['view'] == 'map' ? 'mapUpdate' : 'listUpdate', $this->filters);
+        $this->dispatchView();
     }
 
     #[On('showPoints')]
@@ -88,6 +90,11 @@ class Dashboard extends Component
 
         $this->validate();
 
+        $this->dispatchView();
+    }
+
+    private function dispatchView(): void
+    {
         $this->dispatch($this->filters['view'] == 'map' ? 'mapUpdate' : 'listUpdate', $this->filters);
     }
 

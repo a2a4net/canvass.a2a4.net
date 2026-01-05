@@ -17,6 +17,11 @@ class Employee extends Model
         'is_active' => 'bool',
     ];
 
+    public function getCodeAttribute(): string
+    {
+        return str_pad($this->id, 4, '0', STR_PAD_LEFT);
+    }
+
     public function scopeSearch(Builder $query, ?string $value): Builder
     {
         return $query->when($value, function ($q, $search) {

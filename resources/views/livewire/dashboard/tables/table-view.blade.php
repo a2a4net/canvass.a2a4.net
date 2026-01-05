@@ -12,7 +12,7 @@
         @if ($employees->isNotEmpty())
             @includeIf('livewire.dashboard.tables.' . $tableView)
         @else
-            <div class="text-center">{{ __('Нічого не знайдено') }}</div>
+            <div class="text-center p-4">{{ __('Нічого не знайдено') }}</div>
         @endif
     </div>
 

@@ -11,10 +11,10 @@ window.LeafletMap = {
 
 window.initMap = initMap;
 window.renderGeoJson = renderGeoJson;
+window.bootstrap = bootstrap;
 
 document.addEventListener('livewire:navigated', () => {
-    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach(el => new bootstrap.Tooltip(el));
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
 });
 
 window.setupDashboardMap = (el, geoJson) => ({
