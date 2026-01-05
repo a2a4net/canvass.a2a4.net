@@ -6,8 +6,7 @@
 
         @foreach([
             'progress' => ['label' => 'Виконання', 'icon' => 'bi-person-walking', 'tooltip' => 'Прогрес'],
-            'time' => ['label' => 'Час на точку', 'icon' => 'bi-speedometer2', 'tooltip' => 'Робочий час за день і медіана на точку'],
-            'efficiency' => ['label' => 'Продуктивність', 'icon' => 'bi-bar-chart-line', 'tooltip' => 'Відношення відсотку виконання плану до медіанного часу на точку'],
+            'time' => ['label' => 'Продуктивність', 'icon' => 'bi-speedometer2', 'tooltip' => 'Робочий час за день і медіана на точку'],
             'density' => ['label' => 'Щільність', 'icon' => 'bi-bezier2', 'tooltip' => 'Концентрація точок і радіус від центру'],
             'deviation' => ['label' => 'Відхилення', 'icon' => 'bi-exclamation-octagon', 'tooltip' => 'Відхилення від запланованого маршруту'],
         ] as $value => $label)

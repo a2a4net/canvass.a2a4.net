@@ -36,7 +36,7 @@ class Dashboard extends Component
         return [
             'filters.eid' => 'nullable|integer|exists:employees,id',
             'filters.view' => 'nullable|string|in:map,list',
-            'filters.type' => 'required|string|in:progress,time,efficiency,density,deviation',
+            'filters.type' => 'required|string|in:progress,time,density,deviation',
             'filters.search' => 'nullable|string|max:100',
             'filters.date.from' => 'required|date',
             'filters.date.to' => 'required|date|after_or_equal:filters.date.from',
@@ -56,6 +56,7 @@ class Dashboard extends Component
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->filters['type'] = 'progress';
             $this->filters['date']['from'] = now()->format('Y-m-d');
             $this->filters['date']['to'] = now()->format('Y-m-d');
         }
