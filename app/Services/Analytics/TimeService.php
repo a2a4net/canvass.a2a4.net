@@ -45,8 +45,8 @@ class TimeService
             ->orderByDesc('id')
             ->paginate(20)
             ->through(function ($employee) {
-                $employee->median_time_human = CarbonInterval::seconds($employee->median_time)->cascade()->forHumans(['short' => true]);
-                $employee->work_time_human = CarbonInterval::seconds($employee->work_time)->cascade()->forHumans(['short' => true]);
+                $employee->median_time_human = CarbonInterval::seconds($employee->median_time)->cascade()->forHumans(['short' => true, 'parts' => 2]);
+                $employee->work_time_human = CarbonInterval::seconds($employee->work_time)->cascade()->forHumans(['short' => true, 'parts' => 2]);
                 $employee->efficiency_index_human = number_format($employee->efficiency_index, 2, '.', '');
 
                 return $employee;
