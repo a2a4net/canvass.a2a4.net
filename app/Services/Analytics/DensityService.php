@@ -26,8 +26,11 @@ class DensityService
             ->groupBy('employee_id');
 
         return Employee::isActive()
-            ->select('employees.*')
-            ->addSelect(DB::raw("COALESCE(`stats`.`total_p`, 0) AS `total_planned`, COALESCE(`stats`.`total_c`, 0) AS `total_checked`, COALESCE(`stats`.`avg_dispersion`, 0) AS `dispersion`, COALESCE(`stats`.`avg_concentration`, 0) AS `concentration`"))
+            ->selectRaw('`employees`.*')
+            ->selectRaw('COALESCE(`stats`.`total_p`, 0) AS `total_planned`')
+            ->selectRaw('COALESCE(`stats`.`total_c`, 0) AS `total_checked`')
+            ->selectRaw('COALESCE(`stats`.`avg_dispersion`, 0) AS `dispersion`')
+            ->selectRaw('COALESCE(`stats`.`avg_concentration`, 0) AS `concentration`')
             ->search($filters['search'] ?? null)
             ->leftJoinSub($analyticsQuery, 'stats', function ($join) {
                 $join->on('employees.id', '=', 'stats.employee_id');

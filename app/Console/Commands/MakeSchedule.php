@@ -12,7 +12,7 @@ use App\Models\Consumer;
 
 class MakeSchedule extends Command
 {
-    protected $signature = 'app:MakeSchedule {year} {month} {run?}';
+    protected $signature = 'app:MakeSchedule {year} {month}';
     protected $description = 'Планування завдань для Працівників на місяць';
     private object $usedDates;
 
@@ -27,45 +27,6 @@ class MakeSchedule extends Command
         $period = CarbonPeriod::create($monthStart, '1 day', $monthStart->copy()->endOfMonth());
 
         $this->makeTasks($employees, $period);
-
-        if ($this->argument('run')) {
-            $this->runTasks($employees, $period);
-        }
-    }
-
-    private function runTasks($employees, $period): void
-    {
-        foreach ($employees as $employee) {
-            foreach ($period as $date) {
-                $tasks = $employee->tasks()
-                    ->with('employee')
-                    ->with('consumer')
-                    ->isNotChecked()
-                    ->whereDate('day', $date->toDateString())
-                    ->orderBy('id')
-                    ->get();
-
-                $offTasks = $employee->tasks()
-                    ->with('employee')
-                    ->with('consumer')
-                    ->isNotChecked()
-                    ->whereDate('day', '>', $date->toDateString())
-                    ->whereMonth('day', $date->month)
-                    ->whereYear('day', $date->year)
-                    ->orderBy('id')
-                    ->limit(rand(0, 3))
-                    ->get();
-
-                $total = $tasks->count() + $offTasks->count();
-
-                if ($total > 0) {
-                    $this->usedDates = $this->generateRandomTimestamps($date, $total, rand(5, 8));
-
-                    $this->checkIns($tasks);
-                    $this->checkIns($offTasks);
-                }
-            }
-        }
     }
 
     private function makeTasks($employees, $period): void

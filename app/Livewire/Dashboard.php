@@ -71,7 +71,9 @@ class Dashboard extends Component
 
         $this->dispatch('tableUpdate', $this->filters);
 
-        $this->dispatchView();
+        if (empty($filters['type'])) {
+            $this->dispatchView();
+        }
     }
 
     #[On('viewUpdate')]
@@ -81,7 +83,9 @@ class Dashboard extends Component
 
         $this->validate();
 
-        $this->dispatchView();
+        if (empty($filters['type'])) {
+            $this->dispatchView();
+        }
     }
 
     #[On('showPoints')]

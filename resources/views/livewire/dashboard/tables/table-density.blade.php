@@ -1,12 +1,12 @@
 <x-selectable-table>
-    <thead>
+    <thead wire:key="{{ uniqid('wire-th') }}">
         <tr>
             <th style="width: 48px;">{{ __('ID') }}</th>
             <th style="width: 220px;">{{ __('Контролер') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('Виконано') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('План') }}</th>
-            <th class="text-end">{{ __('Концентрація') }} <i class="bi bi-info-circle" x-init="new bootstrap.Tooltip($el)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ __('Коефіцієнт групової роботи') }}"></i></th>
-            <th class="text-end">{{ __('Дисперсія') }} <i class="bi bi-info-circle" x-init="new bootstrap.Tooltip($el)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ __('Відстань між кластерами') }}"></i></th>
+            <th style="width: 110px;" class="text-end">{{ __('Виконано') }} <x-info-icon :title="__('Всього обійдено точок (план + відхилення)')" /></th>
+            <th style="width: 85px;" class="text-end">{{ __('План') }} <x-info-icon :title="__('Заплановано точок')" /></th>
+            <th class="text-end">{{ __('Концентрація') }} <x-info-icon :title="__('Відсоток завдань, виконаних кучно')" /></th>
+            <th class="text-end">{{ __('Дисперсія') }} <x-info-icon :title="__('Середня відстань від кожної точки до загального центру маршруту')" /></th>
         </tr>
     </thead>
     <tbody>

@@ -6,9 +6,9 @@
 
         @foreach([
             'progress' => ['label' => 'Виконання', 'icon' => 'bi-person-walking', 'tooltip' => 'Прогрес'],
-            'time' => ['label' => 'Продуктивність', 'icon' => 'bi-speedometer2', 'tooltip' => 'Робочий час за день і медіана на точку'],
-            'density' => ['label' => 'Щільність', 'icon' => 'bi-bezier2', 'tooltip' => 'Концентрація точок і радіус від центру'],
-            'deviation' => ['label' => 'Відхилення', 'icon' => 'bi-exclamation-octagon', 'tooltip' => 'Відхилення від запланованого маршруту'],
+            'time' => ['label' => 'Продуктивність', 'icon' => 'bi-speedometer2', 'tooltip' => 'Робочий час'],
+            'density' => ['label' => 'Щільність', 'icon' => 'bi-bezier2', 'tooltip' => 'Концентрація точок'],
+            'deviation' => ['label' => 'Відхилення', 'icon' => 'bi-exclamation-octagon', 'tooltip' => 'Відхилення від маршруту'],
         ] as $value => $label)
             <input type="radio" class="btn-check" name="type" id="btn-{{ $value }}" value="{{ $value }}" wire:model.live="activeType" autocomplete="off">
 

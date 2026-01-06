@@ -1,10 +1,10 @@
 <x-selectable-table>
-    <thead>
+    <thead wire:key="{{ uniqid('wire-th') }}">
         <tr>
             <th style="width: 48px;">{{ __('ID') }}</th>
             <th style="width: 220px;">{{ __('Контролер') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('Виконано') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('План') }}</th>
+            <th style="width: 110px;" class="text-end">{{ __('Виконано') }} <x-info-icon :title="__('Всього обійдено точок (план + відхилення)')" /></th>
+            <th style="width: 85px;" class="text-end">{{ __('План') }} <x-info-icon :title="__('Заплановано точок')" /></th>
             <th class="text-end">{{ __('Поза маршрутом') }}</th>
             <th class="text-end">{{ __('Відхилення') }}</th>
         </tr>

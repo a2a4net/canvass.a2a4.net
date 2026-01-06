@@ -26,8 +26,11 @@ class DeviationService
             ->groupBy('employee_id');
 
         return Employee::isActive()
-            ->select('employees.*')
-            ->addSelect(DB::raw("COALESCE(`stats`.`total_p`, 0) AS `total_planned`, COALESCE(`stats`.`sum_cu`, 0) AS `total_checked_unplanned`, COALESCE(`stats`.`total_c`, 0) AS `total_checked`, COALESCE(`stats`.`avg_deviation`, 0) as `deviation`"))
+            ->selectRaw('`employees`.*')
+            ->selectRaw('COALESCE(`stats`.`total_p`, 0) AS `total_planned`')
+            ->selectRaw('COALESCE(`stats`.`total_c`, 0) AS `total_checked`')
+            ->selectRaw('COALESCE(`stats`.`sum_cu`, 0) AS `total_checked_unplanned`')
+            ->selectRaw('COALESCE(`stats`.`avg_deviation`, 0) as `deviation`')
             ->search($filters['search'] ?? null)
             ->leftJoinSub($analyticsQuery, 'stats', function ($join) {
                 $join->on('employees.id', '=', 'stats.employee_id');

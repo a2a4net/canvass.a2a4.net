@@ -22,8 +22,6 @@ class RunSchedule extends Command
     {
         $timestamp ??= Carbon::now();
 
-        $dayStr = $timestamp->toDateString();
-
         $employees = DB::table('employees')
             ->where('is_active', true)
             ->select('id', 'name')
@@ -36,7 +34,7 @@ class RunSchedule extends Command
 
             $stats = DB::table('tasks')
                 ->where('employee_id', $employee->id)
-                ->where('day', $dayStr)
+                ->where('day', $timestamp->toDateString())
                 ->selectRaw('COUNT(*) AS `total`, SUM(CASE WHEN `is_checked` = 1 THEN 1 ELSE 0 END) AS `checked`')
                 ->first();
 
@@ -47,7 +45,7 @@ class RunSchedule extends Command
             if ($stats->checked < $targetCount && rand(1, 100) <= 75) {
                 $task = DB::table('tasks')
                     ->where('employee_id', $employee->id)
-                    ->where('day', $dayStr)
+                    ->where('day', $timestamp->toDateString())
                     ->where('is_checked', false)
                     ->orderBy('id')
                     ->first();
@@ -57,14 +55,13 @@ class RunSchedule extends Command
                 }
             }
 
-            if (rand(1, 100) <= 5) {
+            if (rand(1, 100) <= 15) {
                 $futureTask = DB::table('tasks')
                     ->where('employee_id', $employee->id)
-                    ->where('day', '>', $dayStr)
+                    ->where('day', '>=', $timestamp->copy()->startOfMonth()->toDateString())
                     ->where('day', '<=', $timestamp->copy()->endOfMonth()->toDateString())
                     ->where('is_checked', false)
-                    ->orderBy('day')
-                    ->orderBy('id')
+                    ->inRandomOrder()
                     ->first();
 
                 if ($futureTask) {

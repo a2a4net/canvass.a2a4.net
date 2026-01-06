@@ -25,13 +25,17 @@ class ProgressService
             ->groupBy('employee_id');
 
         return Employee::isActive()
-            ->select('employees.*')
-            ->addSelect(DB::raw("COALESCE(`stats`.`total_p`, 0) AS `total_planned`, COALESCE(`stats`.`sum_cu`, 0) AS `total_checked_unplanned`, COALESCE(`stats`.`total_c`, 0) AS `total_checked`, IF(COALESCE(`stats`.`total_p`, 0) > 0, ROUND(((`stats`.`total_c` - `stats`.`sum_cu`) / `stats`.`total_p`) * 100, 2), 0) AS `total_progress`"))
+            ->selectRaw('`employees`.*')
+            ->selectRaw('COALESCE(`stats`.`total_p`, 0) AS `total_planned`')
+            ->selectRaw('COALESCE(`stats`.`total_c`, 0) AS `total_checked`')
+            ->selectRaw('COALESCE(`stats`.`sum_cu`, 0) AS `total_checked_unplanned`')
+            ->selectRaw('IF(COALESCE(`stats`.`total_p`, 0) > 0, ROUND(((`stats`.`total_c` - `stats`.`sum_cu`) / `stats`.`total_p`) * 100, 2), 0) AS `total_progress`')
             ->search($filters['search'] ?? null)
             ->leftJoinSub($analyticsQuery, 'stats', function ($join) {
                 $join->on('employees.id', '=', 'stats.employee_id');
             })
             ->orderByDesc('total_progress')
+            ->orderByDesc('total_checked')
             ->orderByDesc('total_planned')
             ->orderByDesc('id')
             ->paginate(20);

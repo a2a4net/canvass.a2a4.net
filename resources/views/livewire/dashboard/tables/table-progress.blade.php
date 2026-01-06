@@ -1,11 +1,11 @@
 <x-selectable-table>
-    <thead>
+    <thead wire:key="{{ uniqid('wire-th') }}">
         <tr>
             <th style="width: 48px;">{{ __('ID') }}</th>
             <th style="width: 220px;">{{ __('Контролер') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('Виконано') }}</th>
-            <th style="width: 85px;" class="text-end">{{ __('План') }}</th>
-            <th style="width: 135px;" class="text-end">{{ __('Відхилення') }} <i class="bi bi-info-circle" x-init="new bootstrap.Tooltip($el)" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ __('Точок поза плановим маршрутом') }}"></i></th>
+            <th style="width: 110px;" class="text-end">{{ __('Виконано') }} <x-info-icon :title="__('Всього обійдено точок (план + відхилення)')" /></th>
+            <th style="width: 85px;" class="text-end">{{ __('План') }} <x-info-icon :title="__('Заплановано точок')" /></th>
+            <th style="width: 135px;" class="text-end">{{ __('Відхилення') }} <x-info-icon :title="__('Точок поза плановим маршрутом')" /></th>
             <th class="text-center">{{ __('Виконання плану') }}</th>
             <th class="text-end" style="width: 50px;">{{ __('%') }}</th>
         </tr>
