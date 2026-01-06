@@ -15,5 +15,5 @@ Schedule::command(CalculateAnalyticsProgress::class, [now()->subDay()->toDateStr
 
 Schedule::command(CalculateAnalyticsProgress::class, [now()->toDateString()])
     ->weekdays()
-    ->between('09:10', '18:05')
+    ->between('09:05', '18:05')
     ->everyFiveMinutes();

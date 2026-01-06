@@ -42,7 +42,7 @@ class RunSchedule extends Command
 
             $targetCount = ceil($stats->total * $progress);
 
-            if ($stats->checked < $targetCount && rand(1, 100) <= 75) {
+            if ($stats->checked < $targetCount/* && rand(1, 100) <= 75*/) {
                 $task = DB::table('tasks')
                     ->where('employee_id', $employee->id)
                     ->where('day', $timestamp->toDateString())
